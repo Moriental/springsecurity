@@ -31,8 +31,15 @@ public class SecurityConfig {
                         .permitAll());
         http
                 .csrf((auth) -> auth.disable());
+        http
+                .sessionManagement((auth)->auth
+                        //false 초과시 기존 세션 하나 삭제
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)); //true 초과시 새로운 로그인 차단
+        http
+                .sessionManagement((auth) ->auth
+                        .sessionFixation().changeSessionId());
         return http.build();
-    }
 }
 
 
