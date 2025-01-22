@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login","/loginProc","/join","/joinProc").permitAll()
+                        .requestMatchers("/", "/login", "/loginProc", "/join", "/joinProc").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
@@ -29,17 +29,18 @@ public class SecurityConfig {
                         .loginProcessingUrl("/loginProc")
                         //.defaultSuccessUrl("/admin")
                         .permitAll());
+//        http
+//                .csrf((auth) -> auth.disable());
         http
-                .csrf((auth) -> auth.disable());
-        http
-                .sessionManagement((auth)->auth
+                .sessionManagement((auth) -> auth
                         //false 초과시 기존 세션 하나 삭제
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)); //true 초과시 새로운 로그인 차단
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true)); //true 초과시 새로운 로그인 차단
         http
-                .sessionManagement((auth) ->auth
+                .sessionManagement((auth) -> auth
                         .sessionFixation().changeSessionId());
         return http.build();
+    }
 }
 
 
